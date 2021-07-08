@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Sami Fakhry - ENSIMAG Student</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+    MathJax = {
+        tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <div class="jumbotron text-center col-lg-12 col-sm-12 col-xs-12">
+        <a href="index.html"><h1>Sami Fakhry</h1></a>
+        <p>ENSIMAG Student</p>
+        <h6><a href="mailto:Sami.Fakhry@grenoble-inp.org">Contact me</a></h6>
+    </div>
+
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <h2>
+          Question #1
+        </h2>
+        <hr/>
+        <div class="container">
+            <div class="row">
+                <p class="text-justify">Let $(X,Y)\sim\mathcal{N}(0, C)$, with $C$ the covariance matrix $C=\begin{bmatrix}
+                    1 & -1/2 \\
+                    -1/2 & 1 \\
+                    \end{bmatrix}$.  Which points of the unit-square $\left( (-1,1), (1,1), (0,1), (1, 0), \ldots\right)$ are more likely to be an anomaly ?
+                <br><br>
+                Without any visual information it can be quite hard to tell which point is in fact an anomaly. Python (+numpy) is our fastest friend and we could use it here to help us a bit more. <br>
+                With a simple code which simulates random points from a Gaussian with $(0,C)$ as parameters ...
+                <pre><code class="python">
+import numpy as np
+import matplotlib.pyplot as plt
+from math import sqrt
+
+x = []
+y = []
+distance = []
+xp = [0, 0, 1, 1, -1, -1, 1, -1]
+yp = [1, -1, -1, 1, -1, 1, 0, 0]
+
+for i in range(1000):
+    x.append(np.random.multivariate_normal(np.array([0, 0]), np.array([[10,1], [1, 1e-2]]))[0])
+    y.append(np.random.multivariate_normal(np.array([0, 0]), np.array([[10,1], [1, 1e-2]]))[1])
+    distance.append(sqrt(x[i]**2+y[i]**2))
+
+plt.scatter(x, y, c=distance)
+plt.scatter(xp, yp, marker='x', color="red")
+plt.grid()
+plt.show()
+                </code></pre> <br>
+                <br>
+                <img src="image/anime.gif" alt="Gaussian simulation" class="img-responsive mx-auto d-block col-lg-6 col-md-6 col-sm-10 img-thumbnail"/>
+                <br><br>
+                ... we can easily see that the question doesn't give enough information to conclude.
+                <br><br>
+                </p>
+
+            </div>
+        </div>
+        
+        <h2>
+            Question #2
+        </h2>
+        <hr/>
+        <div class="container">
+            <div class="row">
+                <p class="text-justify">The second question is a probability theory one. Here is how it goes. <br> We know 3% of the population is infected by a certain disease. Some tests exist to detect the disease. The true positive rate is 98% while the false positive rate is 4%. If some guy is simultaneously taking the test twice giving positive results for the two, what is the probability to have the disease (the tests are supposed to be independent).  
+                <br><br>
+                Let denote $P(M)=0.03$ the probability to have the disease, $P(Pos|M)=0.98$ the probability to be positive to the test knowing that we have the disease and $P(Pos|\bar{M})=0.04$ the probability to be positive to the test knowing that we don't have the disease. 
+                <br>
+                We are looking for the probability to be ill given two positive results. That is :
+                <br><br>
+                \begin{align}P(M|Pos\cap Pos) &= \frac{P(Pos\cap Pos |M)P(M)}{P(Pos\cap Pos)} \\ &=\frac{P(Pos |M)^2P(M)}{P(Pos\cap Pos|M)P(M)+P(Pos\cap Pos|\bar{M})P(\bar{M})} \\ &= \frac{P(Pos |M)^2P(M)}{P(Pos|M)^2P(M)+P(Pos|\bar{M})^2P(\bar{M})} \\ &= \frac{0.03\times 0.98^2}{0.03\times 0.98^2 +0.97\times0.04^2}\\&\simeq 0.95 \end{align}
+                <br><br>
+                The probability to be ill given two positive results is therfore $0.95$.
+                <br><br>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>
